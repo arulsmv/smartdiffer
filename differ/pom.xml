@@ -25,13 +25,10 @@
     </plugins>
     </build>
     <dependencies>
-
-
-    <dependency>
+      <dependency>
         <groupId>net.sourceforge.argparse4j</groupId>
         <artifactId>argparse4j</artifactId>
         <version>0.8.1</version>
-    </dependency>
-
+      </dependency>
     </dependencies>
 </project>
