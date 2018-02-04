@@ -51,9 +51,7 @@ final class     Scoper {
     private static final String usage = "USAGE: Search -R <configuration.xml>  -i  <Input Diff file> -o <Output Graph File>..\n" +
             "\t -R <configuration.xml> Read configuration from the specified file\n" +
             "\t -i <input diff file>" +
-            "\t -o <output graph file>" +
-            "\t -v1 [version1]" +
-            "\t -v2 [version2]\n";
+            "\t -o <output graph file>\n"; 
 
     //private static int MAX_LINE_NO = 10000;
     private SearchEngine engine;
