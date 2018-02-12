@@ -119,6 +119,9 @@ public class Gitdiffer {
         try {
             BufferedWriter bw  = new BufferedWriter( new OutputStreamWriter (new FileOutputStream(outfile)));
             for (Map.Entry<String, List<Integer>> entry : fileLineMap.entrySet()) {
+                if (!entry.getKey().startsWith("/")) {
+                    bw.write("/");
+                }
                 bw.write(entry.getKey());
                 bw.write("\t");
                 for(Integer i: entry.getValue()) {

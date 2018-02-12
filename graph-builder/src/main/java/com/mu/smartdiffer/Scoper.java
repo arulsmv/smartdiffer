@@ -133,9 +133,14 @@ final class     Scoper {
                     for(Hit hit:results) {
                         int lineno;
                         String refFileName = hit.getFilename();
-                        String refFilePath = hit.getPath().replaceFirst("/", "");
-                        if (!scopesMap.containsKey(refFilePath)) {
-                            System.out.println("Skipping file " + refFileName);
+                        //String refFilePath = hit.getPath().replaceFirst("/", "");
+                        String refFilePath = hit.getPath();//.replaceFirst("/", "");
+                        if (!scopesMap.containsKey(refFilePath)
+                            //System.out.println("might Skip file " + refFileName + " path " + refFilePath);
+                            //continue;
+                        // } if (
+                        && !scopesMap.containsKey(refFilePath.replaceFirst("/", ""))) {
+                            System.out.println("Skipping file " + refFileName + " path " + refFilePath);
                             continue;
                         }
                         //else {
@@ -186,21 +191,17 @@ final class     Scoper {
                 String sfile = entry.getKey();
                 try {
                     Scopes scopes = getScopes(sfile);
-                        if (scopes != null) {
-                            for(Integer i: entry.getValue()){
-                                Scopes.Scope scope = scopes.getScope(i.intValue());
-                                methodScopes.add(scope);
-                            }
+                    if (scopes != null) {
+                        for(Integer i: entry.getValue()){
+                            Scopes.Scope scope = scopes.getScope(i.intValue());
+                            methodScopes.add(scope);
                         }
-                         else {
+                    } else {
                         System.out.println("Error in getting scope for " + sfile );
-                        System.exit(1);
+                       // System.exit(1);
                     }
-                   // }
-                    //else {
-                    System.out.println("Error in scoping size" + methodScopes.size());
-                    //}
-                    scopesMap.put(sfile,methodScopes);
+                    System.out.println("scoping size is" + methodScopes.size());
+                    scopesMap.put(sfile, methodScopes);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
@@ -259,10 +260,10 @@ final class     Scoper {
             // No hits, no definitions...
             return null;
         }
-        System.out.printf("total hits are %d \n", top.totalHits);
+        System.out.printf("Total hits are %d \n", top.totalHits);
         Document doc = searcher.doc(top.scoreDocs[0].doc);
         String foundPath = doc.get(QueryBuilder.PATH);
-        System.out.printf("found path is %s\n" , foundPath);
+        System.out.printf("Found path is %s\n" , foundPath);
         // Only use the Scope if we found an exact match.
         if (srcPath.equals(foundPath) || srcPath.equals("/" + foundPath) || foundPath.equals("/" +srcPath)) {
             IndexableField scop = doc.getField(QueryBuilder.SCOPES);
@@ -270,7 +271,7 @@ final class     Scoper {
                  scopes = Scopes.deserialize(scop.binaryValue().bytes);
             }
         } else {
-            System.out.println("error in found path");
+            System.out.println("Error in found path");
         }
         ireader.close();
         return scopes;
