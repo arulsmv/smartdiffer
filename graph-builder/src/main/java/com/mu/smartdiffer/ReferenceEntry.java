@@ -1,5 +1,6 @@
 package com.mu.smartdiffer;
 
+import org.json.JSONObject;
 /**
  * Created by arulsmv on 18/10/17.
  */
@@ -69,14 +70,14 @@ public class ReferenceEntry {
     }
 
     @Override
-    public String toString() {
-        return "ReferenceEntry{" +
-                "referringFunction='" + referringFunction + '\'' +
-                ", referringFile='" + referringFile + '\'' +
-                ", referringLine=" + referringLine +
-                ", referredFunction='" + referredFunction + '\'' +
-                ", refferedFile='" + refferedFile + '\'' +
-                ", referredLine=" + referredLine +
-                '}';
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("referringFunction", referringFunction);
+        json.put("referringFile", referringFile);
+        json.put("referringLine", referringLine);
+        json.put("referredFunction", referredFunction);
+        json.put("refferedFile", refferedFile);
+        json.put("referredLine", referredLine);
+        return json;
     }
 }

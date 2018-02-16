@@ -35,6 +35,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.index.IndexableField;
+import org.json.JSONArray;
 import org.opensolaris.opengrok.analysis.Scopes;
 import org.opensolaris.opengrok.index.IndexDatabase;
 import org.opensolaris.opengrok.search.Hit;
@@ -106,10 +107,14 @@ final class     Scoper {
     private void printScopes(String outputFile){
         try {
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile)));
+            JSONArray json = new JSONArray();
+
             for(ReferenceEntry entry:entries) {
-                bw.write(entry.toString());
-                bw.newLine();
+                //bw.write(entry.toString());
+                //bw.newLine();
+                json.put(entry.toJson());
             }
+            bw.write(json.toString());
             bw.flush();
             bw.close();
         } catch (IOException e) {

@@ -5,4 +5,4 @@ yes | sudo pip install --upgrade pip
 yes | sudo pip install --upgrade virtualenv 
 
 sudo pip install GitPython
-
+#sudo pip install py2neo
