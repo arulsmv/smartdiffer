@@ -1,4 +1,0 @@
-2018-02-15 17:53:30.639+0000 INFO  [API] Setting startup timeout to: 120000ms based on 120000
-2018-02-15 17:53:33.586+0000 INFO  [API] Successfully started database
-2018-02-15 17:53:34.581+0000 INFO  [API] Successfully stopped database
-2018-02-15 17:53:34.581+0000 INFO  [API] Successfully shutdown Neo4j Server.
