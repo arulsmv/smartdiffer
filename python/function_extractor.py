@@ -27,3 +27,17 @@ def extract_function_java(content, linenumber, method_name):
       if char == '{' : opened_curly_parenthesis +=1
       elif char == '}' : opened_curly_parenthesis -=1
   return line_start, linenumber
+
+
+def extract_function_python(content, linenumber, method_name):
+  while(content[linenumber].rfind(method_name) == -1):
+    linenumber -= 1
+  line_start =linenumber
+  print content[linenumber]
+  m=content[linenumber].find("def ")
+  print m
+  prefix=content[linenumber][0:m]
+  linenumber += 1
+  while (linenumber < len(content) and ( content[linenumber][0] =='\n' or len ( content[linenumber]) > m and content[linenumber][0:m] == prefix and content[linenumber][m+1] in [' ', '\t'])):
+    linenumber+=1
+  return line_start, linenumber
