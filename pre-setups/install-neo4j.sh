@@ -9,3 +9,5 @@ sudo chown neo4j:neo4j /mnt/production/neo4j/data
 sudo yes | /mnt/production/neo4j/bin/neo4j-installer install
 sudo /mnt/production/neo4j/bin/neo4j start-no-wait
 
+sudo pip install py2neo
+
