@@ -69,7 +69,6 @@ public class ReferenceEntry {
         this.referredLine = referredLine;
     }
 
-    @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("referringFunction", referringFunction);
