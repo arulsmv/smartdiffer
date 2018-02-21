@@ -8,9 +8,10 @@ def read_file(repo_src, file_path):
     return contents
 
 def file_type(file_path):
-  return file_path.split('.')[-1].trim()
+  return file_path.split('.')[-1].strip()
 
 def extract_function_java(content, linenumber, method_name):
+  linenumber -= 1 #zero based index
   while(content[linenumber].rfind(method_name) == -1):
     linenumber -= 1
   line_start =linenumber
@@ -41,3 +42,12 @@ def extract_function_python(content, linenumber, method_name):
   while (linenumber < len(content) and ( content[linenumber][0] =='\n' or len ( content[linenumber]) > m and content[linenumber][0:m] == prefix and content[linenumber][m+1] in [' ', '\t'])):
     linenumber+=1
   return line_start, linenumber
+
+def get_method_content(repo_src, file_path, method, line_no):
+  content = read_file(repo_src, file_path)
+  ftype = file_type(file_path)
+  if ftype == 'java':
+    start, end = extract_function_java(content, line_no, method)
+  elif ftype == 'py':
+    start, end = extract_function_python(content, line_no, method)
+  return content[start:end +1]

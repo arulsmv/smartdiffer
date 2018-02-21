@@ -7,6 +7,36 @@ import sys
 
 import argparse
 import git
+import json
+
+from python import function_extractor
+
+def get_details(repo, cmd_param , combined_functions):
+  repo.git.checkout(cmd_param['commit_id'])
+  cmd = "%(opengrok_sh)s index %(directory)s/" % cmd_param
+  status, output = commands.getstatusoutput(cmd)
+  cmd = "java -jar %(scoper_jar)s -R %(environment)s -i %(tmp_dir)s/%(prefix)d_%(run)d.txt -o %(tmp_dir)s/%(prefix)d_%(run)d.out" % cmd_param
+  status, output = commands.getstatusoutput(cmd)
+  with open ("%(tmp_dir)s/%(prefix)d_%(run)d.out" % cmd_param) as f:
+    call_graph = json.load(f)
+
+  for entry in call_graph:
+    key = entry['referringFunction'] + "@" + entry['referringFile']
+    if not combined_functions.get(key):
+      combined_functions[key] = {}
+    method_known = combined_functions.get(key).get(cmd_param['run'], None)
+    if not method_known:
+      print "referring", entry['referringFile'], "@", entry['referringFunction'],":", entry['referringLine']
+      combined_functions.get(key)[cmd_param['run']] = function_extractor.get_method_content(cmd_param['directory'], entry['referringFile'],entry['referringFunction'], entry['referringLine'])
+
+    key = entry['referredFunction'] + "@" + entry['referredFile']
+    if not combined_functions.get(key):
+      combined_functions[key] = {}
+    method_known = combined_functions.get(key).get(cmd_param['run'], None)
+    if not method_known:
+      print "referring", entry['referringFile'], "@", entry['referringFunction'],":", entry['referringLine']
+      combined_functions.get(key)[cmd_param['run']] = function_extractor.get_method_content(cmd_param['directory'], entry['referredFile'],entry['referredFunction'], entry['referredLine'])
+
 
 def main():
   parser = argparse.ArgumentParser("Builds the diff graph between two committs")
@@ -33,6 +63,7 @@ def main():
               }
   cmd = "cd %(directory)s; java -jar %(differ_jar)s -f %(from)s -t %(to)s -o1 %(tmp_dir)s/%(prefix)d_1.txt -o2 %(tmp_dir)s/%(prefix)d_2.txt " % cmd_param
   status, output = commands.getstatusoutput(cmd)
+  """ 
   repo.git.checkout(args.commit_from)
   cmd = "%(opengrok_sh)s index %(directory)s/" % cmd_param
   status, output = commands.getstatusoutput(cmd)
@@ -44,6 +75,28 @@ def main():
   status, output = commands.getstatusoutput(cmd)
   cmd = "java -jar %(scoper_jar)s -R %(environment)s -i %(tmp_dir)s/%(prefix)d_2.txt -o %(tmp_dir)s/%(prefix)d_2.out" % cmd_param
   status, output = commands.getstatusoutput(cmd)
+  with open ("%(tmp_dir)s/%(prefix)d_1.out" % cmd_param) as f:
+    call_graph1 = json.load(f)
+  with open ("%(tmp_dir)s/%(prefix)d_2.out" % cmd_param) as f:
+    call_graph2 = json.load(f)
+
+  combined_functions = {} 
+  repo.git.checkout(args.commit_from)
+  for entry in call_graph1:
+    key = entry['referringFunction'] + "@" + entry['referringFile']
+  """
+  cmd_param['run'] = 1
+  cmd_param['commit_id'] = args.commit_from
+  combined_function = {}
+  get_details(repo, cmd_param, combined_function)
+
+  cmd_param['run'] = 2
+  cmd_param['commit_id'] = args.commit_to
+  get_details(repo, cmd_param, combined_function)
+   
+  print combined_function
+
+
 
   
 
