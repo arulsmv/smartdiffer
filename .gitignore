@@ -2,3 +2,4 @@
 differ/differ.iml
 differ/target
 graph-builder/target
+*.pyc
