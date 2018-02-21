@@ -75,7 +75,7 @@ public class ReferenceEntry {
         json.put("referringFile", referringFile);
         json.put("referringLine", referringLine);
         json.put("referredFunction", referredFunction);
-        json.put("refferedFile", refferedFile);
+        json.put("referredFile", refferedFile);
         json.put("referredLine", referredLine);
         return json;
     }
