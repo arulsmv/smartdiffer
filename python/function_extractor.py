@@ -16,8 +16,9 @@ def extract_function_java(content, linenumber, method_name):
     linenumber -= 1
   line_start =linenumber
   #find first {
-  while(content[linenumber].find('{')) == -1:
+  while(linenumber < len(content) and content[linenumber].find('{')) == -1:
    linenumber += 1
+  if linenumber == len(content): return line_start, line_start
   opened_curly_parenthesis = 0
   for char in content[linenumber]:
     if char == '{' : opened_curly_parenthesis +=1

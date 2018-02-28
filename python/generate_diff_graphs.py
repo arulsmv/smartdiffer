@@ -45,21 +45,21 @@ def build_graph(delta, call_graph1, call_graph2):
   graph = Graph(password='smd')
   tx = graph.begin()
   for key in delta.keys():
-    print key
     nodes[key] = Node("function", title=key, content=delta[key])
+    tx.merge(nodes[key])
 
   for entry in call_graph1:
     calling_fun = entry['referringFunction'] + "@" + entry['referringFile']
     called_fun = entry['referredFunction'] + "@" + entry['referredFile']
     relation = Relationship(nodes[calling_fun], "Original Call To", nodes[called_fun])
-    tx.create(relation)
+    tx.merge(relation)
 
     
   for entry in call_graph2:
     calling_fun = entry['referringFunction'] + "@" + entry['referringFile']
     called_fun = entry['referredFunction'] + "@" + entry['referredFile']
     relation = Relationship(nodes[calling_fun], "Modified Call To", nodes[called_fun])
-    tx.create(relation)
+    tx.merge(relation)
  
   tx.commit()
 
