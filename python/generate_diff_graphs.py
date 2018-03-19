@@ -40,7 +40,38 @@ def get_details(repo, cmd_param , combined_functions):
   return call_graph
 
 
-def build_graph(delta, call_graph1, call_graph2):
+def build_graph(delta, call_graph1, call_graph2, output_file):
+  nodes = [] 
+  relation = []
+  index_map = {}
+  index = 0
+  for key in delta.keys():
+    nodes.append({"id": key, "label": delta[key], "shape": "box", "font": {"face":"monospace", "align":"left"}})
+    index_map[key] = index
+    index += 1
+
+  for entry in call_graph1:
+    calling_fun = entry['referringFunction'] + "@" + entry['referringFile']
+    called_fun = entry['referredFunction'] + "@" + entry['referredFile']
+    relation.append({"from": calling_fun, "to": called_fun, "arrows": "to", "physics": "false", "smooth": {"type": "cubicBezier"}, "label":"Original"}) 
+    #relation.append((calling_fun, "Original Call To", called_fun))
+    
+  for entry in call_graph2:
+    calling_fun = entry['referringFunction'] + "@" + entry['referringFile']
+    called_fun = entry['referredFunction'] + "@" + entry['referredFile']
+    relation.append({"from": calling_fun, "to": called_fun, "arrows": "to", "physics": "false", "smooth": {"type": "cubicBezier"}, "label":"Modified"}) 
+    #relation.append(( calling_fun, "Modified Call To", called_fun))
+
+  fp = open(output_file + ".nodes", "w")
+  json.dump(nodes,  fp)
+  fp.close()
+  fp = open(output_file + ".edges", "w")
+  json.dump(relation, fp)
+  fp.close()
+
+  
+ 
+def build_neo_graph(delta, call_graph1, call_graph2):
   nodes = {}
   graph = Graph(password='smd')
   tx = graph.begin()
@@ -110,7 +141,7 @@ def main():
   del combined_function
   del repo
 
-  build_graph(delta_contents, call_graph1, call_graph2)
+  build_graph(delta_contents, call_graph1, call_graph2, "%(tmp_dir)s/%(prefix)d" % cmd_param)
   
 
 if __name__ == "__main__":

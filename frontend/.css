@@ -1,0 +1,19 @@
+<style type="text/css">
+ 
+.network {
+ 
+  display:block;
+ 
+  width:800px;
+ 
+  height:800px;
+ 
+  border:solid;
+ 
+  background-color:white;
+ 
+}
+ 
+</style>
+ 
+<div class="network">Network Graph</div>
