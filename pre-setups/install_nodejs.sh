@@ -8,3 +8,4 @@ sudo npm link express
 
 sudo npm install -g vis 
 sudo npm link vis
+sudo npm install shrio-trie

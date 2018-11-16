@@ -16,13 +16,14 @@ http.createServer(function (req, res) {
   if (path.match("/vis/vis*")) {
     res.write(fs.readFileSync(__dirname + path));
     res.end();
-  } else{ 
+  } else if (path.match("/c*")) { 
     res.write(fs.readFileSync(__dirname + "/callgraph-header.html"))
-    res.write("var nodes =" + fs.readFileSync(data_dir + path + ".nodes") + ";")
-    res.write("var edges =" + fs.readFileSync(data_dir + path + ".edges") + ";")
-    //res.write(fs.readFileSync(__dirname + "/data" + path))
+    res.write("var nodes =" + fs.readFileSync(data_dir + path + "/_.nodes") + ";\n")
+    res.write("var edges =" + fs.readFileSync(data_dir + path + "/_.edges") + ";\n")
     res.write(fs.readFileSync(__dirname + "/callgraph-footer.html"))
     res.end()
+  } else {
+    console.log("error in " + path);
   }
 }).listen(1337, '127.0.0.1')
 
